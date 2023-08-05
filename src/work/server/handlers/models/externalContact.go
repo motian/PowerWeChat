@@ -73,6 +73,12 @@ type EventExternalUserDelFollowUser struct {
 	ExternalUserID string `xml:"ExternalUserID"`
 }
 
+type EventExternalUserCreate struct {
+	contract.EventInterface
+	models.CallbackMessageHeader
+	ChatID string `xml:"ChatId"`
+}
+
 type EventExternalUserUpdateAddMember struct {
 	contract.EventInterface
 	models.CallbackMessageHeader
