@@ -2,9 +2,11 @@ package auth
 
 import (
 	"context"
+	"fmt"
+	"reflect"
 	"github.com/ArtisanCloud/PowerLibs/v3/object"
 	"github.com/ArtisanCloud/PowerWeChat/v3/src/kernel"
-	"github.com/ArtisanCloud/PowerWeChat/v3/src/openPlatform/auth"
+	"github.com/ArtisanCloud/PowerWeChat/v3/src/openPlatform/authorizer/auth"
 	"github.com/ArtisanCloud/PowerWeChat/v3/src/openPlatform/authorizer/miniProgram/auth/response"
 )
 
@@ -34,7 +36,12 @@ func (comp *Client) Session(ctx context.Context, code string) (*response.Respons
 
 	config := (*comp.App).GetConfig()
 	componentConfig := comp.component.GetConfig()
-	token := comp.component.GetComponent("AccessToken").(*auth.AccessToken)
+	component := comp.component.GetComponent("AccessToken")
+	fmt.Printf("Type: %T\n", component)
+	fmt.Printf("Value: %v\n", component)
+	fmt.Printf("Type (reflect): %s\n", reflect.TypeOf(component).PkgPath())
+
+	token := component.(*auth.AccessToken)
 	componentToken, err := token.GetToken(ctx, false)
 
 	query := &object.StringMap{
