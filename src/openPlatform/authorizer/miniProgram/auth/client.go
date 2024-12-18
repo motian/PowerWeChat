@@ -2,6 +2,8 @@ package auth
 
 import (
 	"context"
+	"fmt"
+	"reflect"
 	"github.com/ArtisanCloud/PowerLibs/v3/object"
 	"github.com/ArtisanCloud/PowerWeChat/v3/src/kernel"
 	"github.com/ArtisanCloud/PowerWeChat/v3/src/openPlatform/auth"
@@ -34,7 +36,28 @@ func (comp *Client) Session(ctx context.Context, code string) (*response.Respons
 
 	config := (*comp.App).GetConfig()
 	componentConfig := comp.component.GetConfig()
-	token := comp.component.GetComponent("AccessToken").(*auth.AccessToken)
+	component := (*comp.App).GetComponent("AccessToken")
+
+	// 打印类型和包路径信息
+	fmt.Printf("Type: %T\n", component)
+	fmt.Printf("Value: %v\n", component)
+	if reflect.TypeOf(component).Kind() == reflect.Ptr {
+		fmt.Printf("Type (reflect): %s\n", reflect.TypeOf(component).Elem().PkgPath())
+	} else {
+		fmt.Printf("Type (reflect): %s\n", reflect.TypeOf(component).PkgPath())
+	}
+	fmt.Printf("Type (reflect): %s\n", reflect.TypeOf(component).String())
+	
+	defer func() {
+		if r := recover(); r != nil {
+			fmt.Printf("Recovered from panic: %v\n", r)
+		}
+	}()
+
+	token, ok := component.(*auth.AccessToken)
+	if !ok {
+		return nil, fmt.Errorf("failed to cast component to *auth.AccessToken, actual type: %T", component)
+	}
 	componentToken, err := token.GetToken(ctx, false)
 
 	query := &object.StringMap{
