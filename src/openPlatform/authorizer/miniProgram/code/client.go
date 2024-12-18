@@ -44,16 +44,14 @@ func (comp *Client) Commit(ctx context.Context, templateID string, extJson strin
 
 // 获取体验版二维码
 // https://developers.weixin.qq.com/doc/oplatform/Third-party_Platforms/2.0/api/code/get_qrcode.html
-func (comp *Client) GetQrCode(ctx context.Context, path string) (*response2.ResponseOpenPlatform, error) {
+func (comp *Client) GetQrCode(ctx context.Context, path string) (*http.Response, error) {
 
-	result := &response2.ResponseOpenPlatform{}
-
-	_, err := comp.BaseClient.RequestRaw(ctx, "wxa/get_qrcode", http.MethodPost, &object.HashMap{
+	rs, err := comp.BaseClient.RequestRaw(ctx, "wxa/get_qrcode", http.MethodGet, &object.HashMap{
 		"query": &object.StringMap{
 			"path": path,
 		}}, nil, result)
 
-	return result, err
+	return rs, err
 
 }
 
