@@ -48,7 +48,7 @@ func (comp *Client) GetQrCode(ctx context.Context, path string) (*response2.Resp
 
 	result := &response2.ResponseOpenPlatform{}
 
-	_, err := comp.BaseClient.RequestRaw(ctx, "wxa/get_qrcode", http.MethodPost, &object.HashMap{
+	_, err := comp.BaseClient.RequestRaw(ctx, "wxa/get_qrcode", http.MethodGet, &object.HashMap{
 		"query": &object.StringMap{
 			"path": path,
 		}}, nil, result)
